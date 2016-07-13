@@ -21,7 +21,7 @@ public class Conexion {
 	}
 	
 	public void conectarse(){
-		emf = Persistence.createEntityManagerFactory("PC4_20133037");
+		emf = Persistence.createEntityManagerFactory("Grupo5WebServices");
 		em = emf.createEntityManager();
 	}
 	
