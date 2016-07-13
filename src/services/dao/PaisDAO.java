@@ -68,6 +68,11 @@ public class PaisDAO {
 		Query query=em.createQuery("SELECT p FROM Pais p");				
 		List<Pais> lista=(List<Pais>)query.getResultList();
 		return lista;
-	}	
+	}
+	
+	public void cargaMasiva(String sql) throws ServletException{
+		Query query=em.createNativeQuery(sql);
+		query.executeUpdate();		
+	}
 	
 }

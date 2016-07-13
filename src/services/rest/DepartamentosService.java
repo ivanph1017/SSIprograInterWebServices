@@ -73,6 +73,21 @@ public class DepartamentosService {
 			return "Hubo un error en el registro";
 		}
 	}
+	@Path("/carga")
+	@POST
+	@Consumes("text/plain; charset=utf-8")
+	@Produces("text/plain; charset=utf-8")
+	public String cargarDepartamentos(String sql){
+		try {
+			new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).cargaMasiva(sql);
+			return "Departamentos cargados satisfactoriamente";
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Hubo un error en la carga";
+		}
+	}
+	
 	@PUT
 	@Consumes("application/json; charset=utf-8")
 	@Produces("text/plain; charset=utf-8")

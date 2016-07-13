@@ -63,4 +63,9 @@ private EntityManager em;
 		List<Provincia> lista=(List<Provincia>)query.getResultList();
 		return lista;
 	}
+	
+	public void cargaMasiva(String sql) throws ServletException{
+		Query query=em.createNativeQuery(sql);
+		query.executeUpdate();		
+	}
 }

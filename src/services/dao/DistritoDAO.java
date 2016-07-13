@@ -58,4 +58,9 @@ public class DistritoDAO {
 		List<Distrito> lista=(List<Distrito>)query.getResultList();
 		return lista;
 	}
+	
+	public void cargaMasiva(String sql) throws ServletException{
+		Query query=em.createNativeQuery(sql);
+		query.executeUpdate();		
+	}
 }

@@ -70,4 +70,9 @@ public class DepartamentoDAO {
 		List<Departamento> lista=(List<Departamento>)query.getResultList();
 		return lista;
 	}
+	
+	public void cargaMasiva(String sql) throws ServletException{
+		Query query=em.createNativeQuery(sql);
+		query.executeUpdate();		
+	}
 }

@@ -72,6 +72,21 @@ public class ProvinciasService {
 			return "Hubo un error en el registro";
 		}
 	}
+	
+	@Path("/carga")
+	@POST
+	@Consumes("text/plain; charset=utf-8")
+	@Produces("text/plain; charset=utf-8")
+	public String cargarProvincias(String sql){
+		try {
+			new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).cargaMasiva(sql);
+			return "Provincias cargadas satisfactoriamente";
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Hubo un error en la carga";
+		}
+	}
 	@PUT
 	@Consumes("application/json; charset=utf-8")
 	@Produces("text/plain; charset=utf-8")
