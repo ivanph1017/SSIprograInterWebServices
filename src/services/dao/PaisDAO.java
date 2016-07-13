@@ -71,8 +71,10 @@ public class PaisDAO {
 	}
 	
 	public void cargaMasiva(String sql) throws ServletException{
+		em.getTransaction().begin();
 		Query query=em.createNativeQuery(sql);
-		query.executeUpdate();		
+		query.executeUpdate();
+		em.getTransaction().commit();
 	}
 	
 }
