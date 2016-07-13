@@ -31,14 +31,14 @@ private EntityManager em;
 	}
 	
 	public void eliminar(int id) throws ServletException{
-		em.getTransaction().begin();		
+				
 		DistritoDAO distritoDAO=new DistritoDAO(em);
 		List<Distrito> listaDistritos=distritoDAO.listaFiltro(id);
 		
 		for(Distrito distrito : listaDistritos){
 			distritoDAO.eliminar(distrito.getId());
 		}
-		
+		em.getTransaction().begin();
 		Provincia provincia=obtenerProvincia(id);
 		em.remove(provincia);
 		em.getTransaction().commit();

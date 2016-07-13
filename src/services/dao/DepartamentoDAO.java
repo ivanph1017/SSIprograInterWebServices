@@ -32,7 +32,7 @@ public class DepartamentoDAO {
 	}
 	
 	public void eliminar(int id) throws ServletException{
-		em.getTransaction().begin();
+		
 		ProvinciaDAO provinciaDAO=new ProvinciaDAO(em);
 		DistritoDAO distritoDAO=new DistritoDAO(em);
 		List<Provincia> listaProvincias=provinciaDAO.listaFiltro(id);
@@ -45,7 +45,7 @@ public class DepartamentoDAO {
 			}
 			provinciaDAO.eliminar(provincia.getId());
 		}
-		
+		em.getTransaction().begin();
 		Departamento dpto=obtenerDepartamento(id);
 		em.remove(dpto);
 		em.getTransaction().commit();

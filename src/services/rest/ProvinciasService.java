@@ -36,7 +36,7 @@ public class ProvinciasService {
 	}
 	
 	
-	@Path("/listaFiltro")
+	@Path("/filtro/lista")
 	@GET
 	@Produces("application/json; charset=utf-8")
 	public List<Provincia> listaProvinciasFiltro(
