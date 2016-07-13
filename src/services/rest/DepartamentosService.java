@@ -24,7 +24,10 @@ public class DepartamentosService {
 	public Departamento verDepartamento(
 			@QueryParam("id") int id){
 			try {
-				return new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).obtenerDepartamento(id);
+				Conexion.getInstancia().conectarse();
+				Departamento dpto=new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).obtenerDepartamento(id);
+				Conexion.getInstancia().desconectarse();
+				return dpto;
 			} catch (ServletException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -39,7 +42,10 @@ public class DepartamentosService {
 	public List<Departamento> listaDepartamentosFiltro(
 			@QueryParam("idPais") int idPais){	
 		 try {
-			 return new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).listaFiltro(idPais);			 
+			 Conexion.getInstancia().conectarse();
+			 List<Departamento> lista=new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).listaFiltro(idPais);
+			 Conexion.getInstancia().desconectarse();
+			 return lista;			 
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +58,10 @@ public class DepartamentosService {
 	@Produces("application/json; charset=utf-8")
 	public List<Departamento> listaDepartamentos(){	
 		 try {
-			 return new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).lista();			 
+			 Conexion.getInstancia().conectarse();
+			 List<Departamento> lista=new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).lista();
+			 Conexion.getInstancia().desconectarse();
+			 return lista;			 
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,7 +74,9 @@ public class DepartamentosService {
 	@Produces("text/plain; charset=utf-8")
 	public String agregarDepartamento(Departamento departamento){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).registrar(departamento);
+			Conexion.getInstancia().desconectarse();
 			return "Departamento registrado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -79,7 +90,9 @@ public class DepartamentosService {
 	@Produces("text/plain; charset=utf-8")
 	public String cargarDepartamentos(String sql){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).cargaMasiva(sql);
+			Conexion.getInstancia().desconectarse();
 			return "Departamentos cargados satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -93,7 +106,9 @@ public class DepartamentosService {
 	@Produces("text/plain; charset=utf-8")
 	public String modificarDepartamento(Departamento departamento){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).editar(departamento);
+			Conexion.getInstancia().desconectarse();
 			return "Departamento modificado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -107,7 +122,9 @@ public class DepartamentosService {
 	public String eliminarDepartamento(
 			@QueryParam("id") int id){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DepartamentoDAO(Conexion.getInstancia().getEntityManager()).eliminar(id);
+			Conexion.getInstancia().desconectarse();
 			return "Departamento eliminado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block

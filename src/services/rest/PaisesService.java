@@ -27,7 +27,10 @@ public class PaisesService {
 	public Pais verPais(
 			@QueryParam("id") int id){
 			try {
-				return new PaisDAO(Conexion.getInstancia().getEntityManager()).obtenerPais(id);
+				Conexion.getInstancia().conectarse();
+				Pais pais=new PaisDAO(Conexion.getInstancia().getEntityManager()).obtenerPais(id);
+				Conexion.getInstancia().desconectarse();
+				return pais;
 			} catch (ServletException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -41,7 +44,10 @@ public class PaisesService {
 	@Produces("application/json; charset=utf-8")
 	public List<Pais> listaPaises(){	
 		 try {
-			 return new PaisDAO(Conexion.getInstancia().getEntityManager()).lista();			 
+			 Conexion.getInstancia().conectarse();
+			 List<Pais> lista=new PaisDAO(Conexion.getInstancia().getEntityManager()).lista();
+			 Conexion.getInstancia().desconectarse();
+			 return lista;			 
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,7 +59,9 @@ public class PaisesService {
 	@Produces("text/plain; charset=utf-8")
 	public String agregarPais(Pais pais){
 		try {
+			Conexion.getInstancia().conectarse();
 			new PaisDAO(Conexion.getInstancia().getEntityManager()).registrar(pais);
+			Conexion.getInstancia().desconectarse();
 			return "Pais registrado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -67,7 +75,9 @@ public class PaisesService {
 	@Produces("text/plain; charset=utf-8")
 	public String cargarPaises(String sql){
 		try {
+			Conexion.getInstancia().conectarse();
 			new PaisDAO(Conexion.getInstancia().getEntityManager()).cargaMasiva(sql);
+			Conexion.getInstancia().desconectarse();
 			return "Paises cargados satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -80,7 +90,9 @@ public class PaisesService {
 	@Produces("text/plain; charset=utf-8")
 	public String modificarPais(Pais pais){
 		try {
+			Conexion.getInstancia().conectarse();
 			new PaisDAO(Conexion.getInstancia().getEntityManager()).editar(pais);
+			Conexion.getInstancia().desconectarse();
 			return "Pais modificado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -94,7 +106,9 @@ public class PaisesService {
 	public String eliminarPais(
 			@QueryParam("id") int id){
 		try {
+			Conexion.getInstancia().conectarse();
 			new PaisDAO(Conexion.getInstancia().getEntityManager()).eliminar(id);
+			Conexion.getInstancia().desconectarse();
 			return "Pais eliminado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block

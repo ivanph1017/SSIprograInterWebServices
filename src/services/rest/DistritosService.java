@@ -24,7 +24,10 @@ public class DistritosService {
 	public Distrito verDistrito(
 			@QueryParam("id") int id){
 			try {
-				return new DistritoDAO(Conexion.getInstancia().getEntityManager()).obtenerDistrito(id);
+				Conexion.getInstancia().conectarse();
+				Distrito dist=new DistritoDAO(Conexion.getInstancia().getEntityManager()).obtenerDistrito(id);
+				Conexion.getInstancia().desconectarse();
+				return dist;
 			} catch (ServletException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -39,7 +42,10 @@ public class DistritosService {
 	public List<Distrito> listaDistritosFiltro(
 			@QueryParam("idProvincia") int idProvincia){	
 		 try {
-			 return new DistritoDAO(Conexion.getInstancia().getEntityManager()).listaFiltro(idProvincia);			 
+			 Conexion.getInstancia().conectarse();
+			 List<Distrito> lista=new DistritoDAO(Conexion.getInstancia().getEntityManager()).listaFiltro(idProvincia);
+			 Conexion.getInstancia().desconectarse();
+			 return lista; 			 
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +58,10 @@ public class DistritosService {
 	@Produces("application/json; charset=utf-8")
 	public List<Distrito> listaDistritos(){	
 		 try {
-			 return new DistritoDAO(Conexion.getInstancia().getEntityManager()).lista();			 
+			 Conexion.getInstancia().conectarse();
+			 List<Distrito> lista=new DistritoDAO(Conexion.getInstancia().getEntityManager()).lista();			 
+			 Conexion.getInstancia().desconectarse();
+			 return lista;
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +73,9 @@ public class DistritosService {
 	@Produces("text/plain; charset=utf-8")
 	public String agregarDistrito(Distrito distrito){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DistritoDAO(Conexion.getInstancia().getEntityManager()).registrar(distrito);
+			Conexion.getInstancia().desconectarse();
 			return "Distrito registrado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -79,7 +90,9 @@ public class DistritosService {
 	@Produces("text/plain; charset=utf-8")
 	public String cargarDistritos(String sql){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DistritoDAO(Conexion.getInstancia().getEntityManager()).cargaMasiva(sql);
+			Conexion.getInstancia().desconectarse();
 			return "Distritos cargados satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -92,7 +105,9 @@ public class DistritosService {
 	@Produces("text/plain; charset=utf-8")
 	public String modificarDistrito(Distrito distrito){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DistritoDAO(Conexion.getInstancia().getEntityManager()).editar(distrito);
+			Conexion.getInstancia().desconectarse();
 			return "Distrito modificado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -106,7 +121,9 @@ public class DistritosService {
 	public String eliminarDistrito(
 			@QueryParam("id") int id){
 		try {
+			Conexion.getInstancia().conectarse();
 			new DistritoDAO(Conexion.getInstancia().getEntityManager()).eliminar(id);
+			Conexion.getInstancia().desconectarse();
 			return "Distrito eliminado satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block

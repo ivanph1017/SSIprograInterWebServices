@@ -24,7 +24,10 @@ public class ProvinciasService {
 	public Provincia verProvincia(
 			@QueryParam("id") int id){
 			try {
-				return new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).obtenerProvincia(id);
+				Conexion.getInstancia().conectarse();
+				Provincia prov=new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).obtenerProvincia(id);
+				Conexion.getInstancia().desconectarse();
+				return prov;
 			} catch (ServletException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -39,7 +42,10 @@ public class ProvinciasService {
 	public List<Provincia> listaProvinciasFiltro(
 			@QueryParam("idDepartamento") int idDepartamento){	
 		 try {
-			 return new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).listaFiltro(idDepartamento);			 
+			 Conexion.getInstancia().conectarse();
+			 List<Provincia> lista=new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).listaFiltro(idDepartamento);
+			 Conexion.getInstancia().desconectarse();
+			 return lista;			 
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,7 +57,10 @@ public class ProvinciasService {
 	@Produces("application/json; charset=utf-8")
 	public List<Provincia> listaProvincias(){	
 		 try {
-			 return new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).lista();		 
+			 Conexion.getInstancia().conectarse();
+			 List<Provincia> lista=new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).lista();
+			 Conexion.getInstancia().desconectarse();
+			 return lista;		 
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +73,9 @@ public class ProvinciasService {
 	@Produces("text/plain; charset=utf-8")
 	public String agregarProvincia(Provincia provincia){
 		try {
+			Conexion.getInstancia().conectarse();
 			new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).registrar(provincia);
+			Conexion.getInstancia().desconectarse();
 			return "Provincia registrada satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -79,7 +90,9 @@ public class ProvinciasService {
 	@Produces("text/plain; charset=utf-8")
 	public String cargarProvincias(String sql){
 		try {
+			Conexion.getInstancia().conectarse();
 			new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).cargaMasiva(sql);
+			Conexion.getInstancia().desconectarse();
 			return "Provincias cargadas satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -92,7 +105,9 @@ public class ProvinciasService {
 	@Produces("text/plain; charset=utf-8")
 	public String modificarProvincia(Provincia provincia){
 		try {
+			Conexion.getInstancia().conectarse();
 			new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).editar(provincia);
+			Conexion.getInstancia().desconectarse();
 			return "Provincia modificada satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
@@ -106,7 +121,9 @@ public class ProvinciasService {
 	public String eliminarProvincia(
 			@QueryParam("id") int id){
 		try {
+			Conexion.getInstancia().conectarse();
 			new ProvinciaDAO(Conexion.getInstancia().getEntityManager()).eliminar(id);
+			Conexion.getInstancia().desconectarse();
 			return "Provincia eliminada satisfactoriamente";
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
