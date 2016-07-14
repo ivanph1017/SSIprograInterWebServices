@@ -54,6 +54,25 @@ public class PaisesService {
 			return null;
 		}
 	}
+	
+	@Path("/cargaMongo")
+	@GET
+	@Consumes("text/plain; charset=utf-8")
+	@Produces("text/plain; charset=utf-8")
+	public String cargaMongo(
+			@QueryParam("id") int id){
+		try {
+			Conexion.getInstancia().conectarse();
+			new PaisDAO(Conexion.getInstancia().getEntityManager()).cargaMongo(id);
+			Conexion.getInstancia().desconectarse();
+			return "Documentos cargados a Mongo satisfactoriamente";
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Hubo un error en la carga";
+		}
+	}
+	
 	@POST
 	@Consumes("application/json; charset=utf-8")
 	@Produces("text/plain; charset=utf-8")
@@ -69,6 +88,7 @@ public class PaisesService {
 			return "Hubo un error en el registro";
 		}
 	}
+	
 	@Path("/carga")
 	@POST
 	@Consumes("text/plain; charset=utf-8")

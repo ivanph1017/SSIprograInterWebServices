@@ -1,10 +1,17 @@
 package services.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import services.beans.Departamento;
 import services.beans.Distrito;
@@ -75,6 +82,70 @@ public class PaisDAO {
 		Query query=em.createNativeQuery(sql);
 		query.executeUpdate();
 		em.getTransaction().commit();
+	}
+	
+	public void cargaMongo(int id) throws ServletException{
+		MongoClient mongoClient = new MongoClient( "localhost");
+		MongoDatabase database = mongoClient.getDatabase("peru");
+		
+		MongoCollection<Document> colPaises = database.getCollection("paises");
+		MongoCollection<Document> colDepartamentos = database.getCollection("departamentos");
+		MongoCollection<Document> colProvincias = database.getCollection("provincias");
+		MongoCollection<Document> colDistritos = database.getCollection("distritos");
+		
+		Pais pais=obtenerPais(id);
+		Document doc=new Document("id", pais.getId())
+				.append("nombre", pais.getNombre())
+				.append("poblacion", pais.getPoblacion())
+				.append("pbi", pais.getPbi());
+		colPaises.insertOne(doc);
+		
+		List<Departamento> departamentosMySQL=new DepartamentoDAO(em).listaFiltro(id);
+		List<Provincia> provinciasMySQL;
+		List<Distrito> distritosMySQL;
+		
+		
+		List<Document> departamentosMongo=new ArrayList<Document>();
+		List<Document> provinciasMongo=new ArrayList<Document>();
+		List<Document> distritosMongo=new ArrayList<Document>();
+		
+		Document docDepartamento;
+		Document docProvincia;
+		Document docDistrito;
+		
+		for(Departamento depa : departamentosMySQL){
+			docDepartamento=new Document("id", depa.getId())
+					.append("nombre", depa.getNombre())
+					.append("pais_id", depa.getPais().getId());					
+			departamentosMongo.add(docDepartamento);
+			
+			provinciasMySQL=new ProvinciaDAO(em).listaFiltro(depa.getId());
+			for(Provincia prov : provinciasMySQL){
+				docProvincia=new Document("id", prov.getId())
+						.append("departamento_id", prov.getDepartamento().getId())
+						.append("nombre", prov.getNombre());
+				provinciasMongo.add(docProvincia);
+				
+				distritosMySQL=new DistritoDAO(em).listaFiltro(prov.getId());
+				for(Distrito dist : distritosMySQL){
+					docDistrito=new Document("id", dist.getId())
+							.append("provincia_id", dist.getProvincia().getId())
+							.append("nombre", dist.getNombre())
+							.append("poblacion", dist.getPoblacion());
+					distritosMongo.add(docDistrito);
+				}
+				colDistritos.insertMany(distritosMongo);
+				
+				
+			}
+			colProvincias.insertMany(provinciasMongo);
+			
+			
+		}		
+		colDepartamentos.insertMany(departamentosMongo);
+		
+		mongoClient.close();
+		
 	}
 	
 }
