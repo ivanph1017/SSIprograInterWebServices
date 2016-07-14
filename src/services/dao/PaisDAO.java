@@ -93,22 +93,10 @@ public class PaisDAO {
 		MongoCollection<Document> colProvincias = database.getCollection("provincias");
 		MongoCollection<Document> colDistritos = database.getCollection("distritos");
 		
-		Pais pais=obtenerPais(id);
-		Document doc=new Document("id", pais.getId())
-				.append("nombre", pais.getNombre())
-				.append("poblacion", pais.getPoblacion())
-				.append("pbi", pais.getPbi());
-		colPaises.insertOne(doc);
-		
 		List<Departamento> departamentosMySQL=new DepartamentoDAO(em).listaFiltro(id);
 		List<Provincia> provinciasMySQL;
 		List<Distrito> distritosMySQL;
-		
-		
-		List<Document> departamentosMongo=new ArrayList<Document>();
-		List<Document> provinciasMongo=new ArrayList<Document>();
-		List<Document> distritosMongo=new ArrayList<Document>();
-		
+			
 		Document docDepartamento;
 		Document docProvincia;
 		Document docDistrito;
@@ -116,15 +104,13 @@ public class PaisDAO {
 		for(Departamento depa : departamentosMySQL){
 			docDepartamento=new Document("id", depa.getId())
 					.append("nombre", depa.getNombre())
-					.append("pais_id", depa.getPais().getId());					
-			departamentosMongo.add(docDepartamento);
+					.append("pais_id", depa.getPais().getId());				
 			
 			provinciasMySQL=new ProvinciaDAO(em).listaFiltro(depa.getId());
 			for(Provincia prov : provinciasMySQL){
 				docProvincia=new Document("id", prov.getId())
 						.append("departamento_id", prov.getDepartamento().getId())
-						.append("nombre", prov.getNombre());
-				provinciasMongo.add(docProvincia);
+						.append("nombre", prov.getNombre());				
 				
 				distritosMySQL=new DistritoDAO(em).listaFiltro(prov.getId());
 				for(Distrito dist : distritosMySQL){
@@ -132,17 +118,22 @@ public class PaisDAO {
 							.append("provincia_id", dist.getProvincia().getId())
 							.append("nombre", dist.getNombre())
 							.append("poblacion", dist.getPoblacion());
-					distritosMongo.add(docDistrito);
+					colDistritos.insertOne(docDistrito);
+					
 				}
-				colDistritos.insertMany(distritosMongo);
 				
-				
+				colProvincias.insertOne(docProvincia);
 			}
-			colProvincias.insertMany(provinciasMongo);
 			
-			
-		}		
-		colDepartamentos.insertMany(departamentosMongo);
+			colDepartamentos.insertOne(docDepartamento);
+		}
+		
+		Pais pais=obtenerPais(id);
+		Document doc=new Document("id", pais.getId())
+				.append("nombre", pais.getNombre())
+				.append("poblacion", pais.getPoblacion())
+				.append("pbi", pais.getPbi());
+		colPaises.insertOne(doc);
 		
 		mongoClient.close();
 		
